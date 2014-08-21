@@ -5,6 +5,11 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.Inet4Address;
+import java.net.MalformedURLException;
+import java.net.UnknownHostException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -13,6 +18,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import persistencia.Persistencia;
+import logica.IServidorChat;
 
 public class VentanaChat extends UnicastRemoteObject implements ActionListener, IVentanaChat
 {
@@ -65,6 +73,26 @@ public class VentanaChat extends UnicastRemoteObject implements ActionListener, 
     	 * 2. si es la primera vez que me conecto, le paso mi url para que la registre
     	 * 3. le paso el mensaje que el usuario acaba de escribir en el campo de texto
     	 */
+    	try {
+			IServidorChat isc = (IServidorChat)Naming.lookup(obtenerIpServidor());
+			isc.registrarCliente(Inet4Address.getLocalHost().getHostAddress());
+			
+			String mensaje = textField.getText();
+			isc.publicarMensaje(mensaje);
+			
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (NotBoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnknownHostException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
     }
 
     public void updateMensaje (String msg) throws RemoteException
@@ -73,5 +101,14 @@ public class VentanaChat extends UnicastRemoteObject implements ActionListener, 
     	 * a este método me lo invoca el servidor cuando le llega un nuevo mensaje
     	 * 1. actualizo mi etiqueta con el mensaje que acabo de recibir
     	 */
+    	
+    	label.setText(msg);
     }    
+    
+    private String obtenerIpServidor(){
+    	String servidor = new String();
+    	Persistencia persistencia = new Persistencia();
+    	
+    	return persistencia.ipServidor();
+    }
 }
