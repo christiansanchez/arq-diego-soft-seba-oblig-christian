@@ -14,7 +14,7 @@ public class MainServidor
 		 * 1. creo una instancia del servidor de chat
 		 * 2. la publico en el rmiregistry para que los clientes se puedan conectar con ella
 		 */
-		try {
+		try {//Prueba Diego
 			ServidorChat sc = new ServidorChat();
 			Persistencia persistencia = new Persistencia();
 			Naming.rebind(persistencia.ipServidor(), sc);
