@@ -20,7 +20,7 @@ public class MainServidor
 			prop.load(new FileInputStream("properties/server.properties"));
 			String puerto = prop.getProperty("Puerto");
 			String ipServidor = prop.getProperty("Servidor");
-			String ruta = "//"+ ipServidor + ":" + puerto + "/server";
+			String ruta = "//"+ ipServidor + ":" + puerto + "/servidor";
 			
 			IServidorChat servidorChat = new ServidorChat();
 			System.out.println("Servidor iniciado ");

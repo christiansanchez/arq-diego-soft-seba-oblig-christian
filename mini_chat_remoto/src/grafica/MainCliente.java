@@ -12,10 +12,16 @@ public class MainCliente
 		 * 1. creo una instancia de la ventana de chat
 		 * 2. la publico en el rmiregistry para que el servidor se pueda conectar con ella
 		 */
-		try {
-			VentanaChat vc = new VentanaChat();
+		try {			
+			Properties prop = new Properties();
+			prop.load(new FileInputStream("properties/server.properties"));
+			String puerto = prop.getProperty("Puerto");
+			String ruta = "//" + InetAddress.getLocalHost().getHostAddress() + ":" + puerto + "/cliente";
 			
-			Naming.rebind("localhost:8181/Ventana", vc);
+			IVentanaChat iVentanaChat = new VentanaChat();
+			System.out.println("Cliente iniciado ");
+			Naming.rebind(ruta, iVentanaChat);
+			System.out.println("y publicado <RMI>");
 			
 		} catch (RemoteException e) {
 			e.printStackTrace();
