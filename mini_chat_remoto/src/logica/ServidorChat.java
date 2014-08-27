@@ -23,8 +23,7 @@ public class ServidorChat extends UnicastRemoteObject implements IServidorChat {
 	 */
 	ArrayList<String> arr_clientes;
 	ArrayList<String> arr_mensajes;
-	
-	
+	IVentanaChat ventana;
 
 	public ServidorChat() throws RemoteException 
 	{
@@ -40,8 +39,7 @@ public class ServidorChat extends UnicastRemoteObject implements IServidorChat {
 	{
 		/*
 		 * 1. agrego la url del nuevo cliente a mi lista de clientes
-		 */
-		
+		 */		
 		if(!arr_clientes.contains(urlCliente))
 			arr_clientes.add(urlCliente);
 	}
@@ -60,9 +58,7 @@ public class ServidorChat extends UnicastRemoteObject implements IServidorChat {
 			repartirUltimoMensaje();
 		} catch (IOException e) {
 			throw new RemoteException(e.getMessage());
-		}
-		
-		
+		}	
 	}
 
 	public void repartirUltimoMensaje() throws RemoteException
@@ -73,21 +69,19 @@ public class ServidorChat extends UnicastRemoteObject implements IServidorChat {
 		 * 2. le paso el último mensaje recibido para que lo muestre en su ventana 
 		 */
 		String msg = arr_mensajes.get(arr_mensajes.size()-1);
-		IVentanaChat ivc = null;
+		IVentanaChat iVentanaChat = null;
 		
 		for(String cliente : arr_clientes){
 			try {
-				ivc = (IVentanaChat)Naming.lookup(cliente);
-				ivc.updateMensaje(msg);
+				iVentanaChat = (IVentanaChat) Naming.lookup(cliente);
+				iVentanaChat.updateMensaje(msg);
 				
 			} catch (MalformedURLException e) {
 				throw new RemoteException(e.getMessage());
 			} catch (NotBoundException e) {
 				throw new RemoteException(e.getMessage());
-			}
-			
+			}	
 		}
 	}
-	
 	
 }
