@@ -14,16 +14,26 @@ public class MainServidor
 		 * 1. creo una instancia del servidor de chat
 		 * 2. la publico en el rmiregistry para que los clientes se puedan conectar con ella
 		 */
-		try {//Prueba Diego
-			ServidorChat sc = new ServidorChat();
-			Persistencia persistencia = new Persistencia();
-			Naming.rebind(persistencia.ipServidor(), sc);
+		try {
+			
+			Properties prop = new Properties();
+			prop.load(new FileInputStream("properties/server.properties"));
+			String puerto = prop.getProperty("Puerto");
+			String ipServidor = prop.getProperty("Servidor");
+			String ruta = "//"+ ipServidor + ":" + puerto + "/server";
+			
+			IServidorChat servidorChat = new ServidorChat();
+			System.out.println("Servidor iniciado ");
+			Naming.rebind(ruta, servidorChat);
+			System.out.println("y publicado <RMI>");
 			
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
