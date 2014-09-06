@@ -11,15 +11,17 @@ public class Emisor {
 			System.out.println("inicia clase emisor");
 			DatagramSocket ds = new DatagramSocket(5000);
 			byte[] buf = new byte[64];
-			DatagramPacket dp = new DatagramPacket(buf, buf.length,InetAddress.getByName("localhost"),5001);
+			
 
 			String msjAEnviar = new String();
 			msjAEnviar = "Sebastián Sequeira";
 			buf = msjAEnviar.getBytes();
-
+			
+			DatagramPacket dp = new DatagramPacket(buf, buf.length,InetAddress.getByName("Think-seba"),5001);
 			//Falta enviar el broadcast
 			ds.send(dp);
 			ds.close();
+			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
