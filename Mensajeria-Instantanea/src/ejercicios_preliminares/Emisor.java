@@ -11,7 +11,7 @@ public class Emisor {
 			System.out.println("inicia clase emisor");
 			DatagramSocket ds = new DatagramSocket(5000);
 			byte[] buf = new byte[64];
-			
+			//Prueba diego
 
 			String msjAEnviar = new String();
 			msjAEnviar = "Sebastián Sequeira";
