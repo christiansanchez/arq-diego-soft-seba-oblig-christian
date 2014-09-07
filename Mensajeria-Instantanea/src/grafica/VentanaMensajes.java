@@ -45,5 +45,6 @@ public class VentanaMensajes
 		/*
 		 * 1. pongo al controlador a recibirMensajes
 		 */
+		controlador.recibirMensajes();
 	}
 }

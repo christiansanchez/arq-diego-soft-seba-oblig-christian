@@ -90,6 +90,7 @@ public class VentanaPrincipal
 							/*
 							 * 1. Le pido al controlador que difunda que estoy activo
 							 */
+							controlador.difundirEstoyActivo();
 						}
 					});
 		}
@@ -113,6 +114,11 @@ public class VentanaPrincipal
 					 *    y le pido a mi controlador que se lo envíe al equipo seleccionado
 					 * 4. le pido al controlador que muestre la ventana de mensajes
 					 */
+					String ip = getListEquiposActivos().getSelectedItem();
+					if(ip != null){
+						controlador.enviarMensaje(textFieldMensaje.getText(), ip);
+					}
+					controlador.mostrarVentanaMensajes();
 				}
 			});
 		}
@@ -135,6 +141,6 @@ public class VentanaPrincipal
 		/*
 		 * 1. pongo al controlador a recibirEquiposActivos
 		 */
-
+		controlador.recibirEquiposActivos();
 	}
 }

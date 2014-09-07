@@ -6,10 +6,12 @@ public class ControladorPrincipal
 {
 	private VentanaPrincipal ventanaPrincipal = null;
 	private VentanaMensajes ventanaMensajes = null;
+	private Fachada fachada;
 	
 	public ControladorPrincipal (VentanaPrincipal ventana)
 	{
 		this.ventanaPrincipal = ventana;
+		fachada = Fachada.getInstancia();
 	}
 	
 	public void difundirEstoyActivo ()
@@ -17,6 +19,8 @@ public class ControladorPrincipal
 		/*
 		 * 1. Difundo a través de la fachada que estoy activo
 		 */
+		fachada.difundirEstoyActivo();
+		
 	}
 	
 	public void recibirEquiposActivos ()
@@ -28,6 +32,12 @@ public class ControladorPrincipal
 		 * 3. En otro caso, actualizo la lista de equipos activos de la VentanaPrincipal
 		 *    con la dirección IP del equipo activo que fue recibida
 		 */
+		 while(true){
+			 String ip = fachada.recibirEquipoActivo();
+			 if(!ip.equals("ninguna")){
+				 ventanaPrincipal.getListEquiposActivos().add(ip);
+			 }
+		 }
 	}
 	
 	public void enviarMensaje (String mensaje, String ipEquipoSeleccionado)
@@ -35,6 +45,7 @@ public class ControladorPrincipal
 		/*
 		 * 1. Envío a través de la fachada el mensaje recibido al equipo seleccionado
 		 */
+		fachada.enviarMensaje(mensaje, ipEquipoSeleccionado);
 	}
 	
 	public void mostrarVentanaMensajes ()
