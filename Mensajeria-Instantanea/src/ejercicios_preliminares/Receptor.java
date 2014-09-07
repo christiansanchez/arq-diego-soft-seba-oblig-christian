@@ -2,7 +2,6 @@ package ejercicios_preliminares;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.SocketAddress;
 
 
 public class Receptor {
@@ -16,9 +15,9 @@ public class Receptor {
 			while(true){
 				ds.receive(dp);
 				String msjRecibido = new String(buf);
-				SocketAddress socketAddress = ds.getRemoteSocketAddress();
-				System.out.println("Mensaje recibido: " + msjRecibido);
-//				System.out.println("IP sender: " + socketAddress.toString());
+				System.out.print("IP: " + dp.getAddress().getHostAddress());
+				System.out.print(" - Mensaje recibido: " + msjRecibido + "\n");
+				//ds.close();
 			}
 		}catch(Exception e){
 			e.printStackTrace();
