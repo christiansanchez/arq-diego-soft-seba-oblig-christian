@@ -45,6 +45,12 @@ public class VentanaMensajes
 		/*
 		 * 1. pongo al controlador a recibirMensajes
 		 */
-		controlador.recibirMensajes();
+		Thread hilo = new Thread(){
+			public void run()
+			{
+				controlador.recibirMensajes();
+			}
+		};
+		hilo.start();
 	}
 }
