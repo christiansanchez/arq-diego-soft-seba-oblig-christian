@@ -15,6 +15,7 @@ public class Receptor {
 			while(true){
 				ds.receive(dp);
 				String msjRecibido = new String(buf);
+				msjRecibido = msjRecibido.trim();
 				System.out.print("IP: " + dp.getAddress().getHostAddress());
 				System.out.print(" - Mensaje recibido: " + msjRecibido + "\n");
 				//ds.close();

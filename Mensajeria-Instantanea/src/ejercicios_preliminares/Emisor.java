@@ -13,7 +13,7 @@ public class Emisor {
 			byte[] buf = new byte[64];
 
 			String msjAEnviar = new String();
-			msjAEnviar = "Sebastián Sequeira";
+			msjAEnviar = "hola, fede";
 			buf = msjAEnviar.getBytes();
 			
 			DatagramPacket dp;
