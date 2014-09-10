@@ -73,7 +73,7 @@ public class Fachada
 			DatagramPacket dp = new DatagramPacket(buf, buf.length);
 			socketEquiposActivos.receive(dp);
 			String mensaje = new String(buf);
-			mensaje.trim();
+			mensaje = mensaje.trim();
 			if(mensaje.equals("ArqSoft")){
 				ipEmisor = dp.getAddress().getHostAddress();
 			}else{
@@ -118,7 +118,7 @@ public class Fachada
 			DatagramPacket dp = new DatagramPacket(buf, buf.length);
 			socketRecepcionMensajes.receive(dp);
 			mensaje = new String(buf);
-			mensaje.trim();
+			mensaje = mensaje.trim();
 			
 			Persistencia p = new Persistencia();
 			p.persistirMensaje(dp.getAddress().getHostAddress(), mensaje);
