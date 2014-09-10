@@ -25,6 +25,7 @@ public class ControladorMensajes
 		while(true){
 			String mensaje = fachada.recibirMensaje();
 			TextArea texto = ventanaMensajes.getTextAreaConversacion();
+			mensaje = mensaje + "\n";
 			texto.append(mensaje);
 		}
 	}
