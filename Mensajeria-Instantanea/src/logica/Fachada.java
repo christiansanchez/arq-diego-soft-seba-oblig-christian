@@ -5,6 +5,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
+import persistencia.Persistencia;
+
 public class Fachada 
 {
 	private static Fachada instancia = null;
@@ -118,9 +120,9 @@ public class Fachada
 			mensaje = new String(buf);
 			mensaje.trim();
 			
-			//TODO: DARIN: aca va la parte de persistencia (persistirMensaje)¬
-			
-			//
+			Persistencia p = new Persistencia();
+			p.persistirMensaje(dp.getAddress().getHostAddress(), mensaje);
+
 			mensaje = dp.getAddress().getHostAddress() + ":" + mensaje;
 		} catch (Exception e) {
 			e.printStackTrace();
