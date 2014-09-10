@@ -16,8 +16,7 @@ public class Persistencia
 		{ 	
 			FileOutputStream archivo = new FileOutputStream("src/persistencia/historial.txt", true);
 			ObjectOutputStream objeto = new ObjectOutputStream(archivo);
-			//String dataPersistir = ipEmisor + ": " + mensaje;
-			//objeto.writeObject (dataPersistir);
+
 			objeto.writeObject (ipEmisor);
 			objeto.writeObject (mensaje);
 			objeto.close();
