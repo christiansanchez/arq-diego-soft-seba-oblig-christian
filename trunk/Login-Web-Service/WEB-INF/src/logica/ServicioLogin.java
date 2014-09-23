@@ -9,7 +9,9 @@ public class ServicioLogin {
 
 	public ServicioLogin ( ){
 		/* método constructor, crea el hashtable vacío */
-		usuarios = new Hashtable<String, Usuario>(); 
+		if(usuarios == null){
+			usuarios = new Hashtable<String, Usuario>();	
+		}	 
 	}
 	
 	public boolean existsUser (String name){
