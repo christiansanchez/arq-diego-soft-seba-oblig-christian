@@ -130,4 +130,9 @@ public class Fachada
 		
 		return mensaje;
 	}
+	
+	public boolean validateUser (String name, String pwd){
+		//TODO: DARIN: consumir desde web service
+		return false;
+	}
 }
