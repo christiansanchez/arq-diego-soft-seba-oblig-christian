@@ -4,6 +4,12 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.rmi.RemoteException;
+
+import logica.LoginStub.ValidateUser;
+import logica.LoginStub.ValidateUserResponse;
+
+import org.apache.axis2.AxisFault;
 
 import persistencia.Persistencia;
 
@@ -130,11 +136,23 @@ public class Fachada
 		
 		return mensaje;
 	}
-	
-	public boolean validateUser(String name, String pwd){
-		boolean usrValido = false;
-		
-		
-		return usrValido;
+
+	public boolean validateUser (String name, String pwd){
+		//TODO: DARIN: consumir desde web service
+		String url = "http://127.0.0.1:8080/axis2/services/" + "Login.LoginHttpEndpoint/";
+
+		LoginStub cliente;
+		ValidateUser reqValidar = new ValidateUser();
+		ValidateUserResponse valUsrResp = new ValidateUserResponse();
+		try {
+			cliente = new LoginStub(url);	
+			reqValidar.setName(name);
+			reqValidar.setPwd(pwd);	
+			valUsrResp = cliente.validateUser(reqValidar);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+
+		return valUsrResp.get_return();
 	}
 }
