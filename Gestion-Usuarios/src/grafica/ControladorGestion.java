@@ -1,8 +1,15 @@
 package grafica;
 
+import logica.FachadaGestion;
+
 public class ControladorGestion {
 
-	//Intermedia entre la ventana de gestión y la capa lógica.
+	private VentanaGestion ventanaGestion = null;
+	private FachadaGestion fachada;
 	
+	public ControladorGestion (VentanaGestion ventana){
+		this.ventanaGestion = ventana;
+		fachada = FachadaGestion.getInstancia();
+	}
 	
 }
