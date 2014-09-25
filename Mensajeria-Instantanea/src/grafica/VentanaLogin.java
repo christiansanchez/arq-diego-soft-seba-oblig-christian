@@ -10,17 +10,27 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 public class VentanaLogin {
 	
 	private ControladorLogin controlador = null;
 	private JFrame frame;
 	private JTextField textUsuario;
 	private JPasswordField pwdPassword;
+	private JLabel labelUsuario;
+	private JLabel labelPassword;
+	private JLabel labelDatos;
+	private JButton buttonIniciarSesion;
+	private JLabel labelError;
 
 	public VentanaLogin() {
+		controlador = new ControladorLogin(this);
 		initialize();
+		this.getFrame().setVisible(true);
 	}
-	
+
 	public JFrame getFrame(){
 		return this.frame;
 	}
@@ -38,12 +48,12 @@ public class VentanaLogin {
 		frame.getContentPane().add(textUsuario);
 		textUsuario.setColumns(10);
 		
-		JLabel labelUsuario = new JLabel("Usuario:");
+		labelUsuario = new JLabel("Usuario:");
 		labelUsuario.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 		labelUsuario.setBounds(10, 103, 105, 31);
 		frame.getContentPane().add(labelUsuario);
 		
-		JLabel labelPassword = new JLabel("Password:");
+		labelPassword = new JLabel("Password:");
 		labelPassword.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 		labelPassword.setBounds(10, 145, 109, 31);
 		frame.getContentPane().add(labelPassword);
@@ -53,27 +63,33 @@ public class VentanaLogin {
 		pwdPassword.setBounds(129, 148, 295, 31);
 		frame.getContentPane().add(pwdPassword);
 		
-		JLabel labelDatos = new JLabel("Ingrese sus datos para iniciar sesi\u00F3n");
+		labelDatos = new JLabel("Ingrese sus datos para iniciar sesi\u00F3n");
 		labelDatos.setHorizontalAlignment(SwingConstants.CENTER);
 		labelDatos.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 		labelDatos.setBounds(10, 11, 414, 31);
 		frame.getContentPane().add(labelDatos);
 		
-		JButton buttonIniciarSesion = new JButton("Iniciar sesi\u00F3n");
-		buttonIniciarSesion.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		buttonIniciarSesion.setBounds(10, 212, 414, 39);
-		frame.getContentPane().add(buttonIniciarSesion);
-		buttonIniciarSesion.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) 
+		buttonIniciarSesion = new JButton("Iniciar sesi\u00F3n");
+		buttonIniciarSesion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
 			{
 				controlador.iniciarSesion(textUsuario.getText(), pwdPassword.getPassword());
 			}
 		});
-		
-		JLabel labelError = new JLabel("");
+		buttonIniciarSesion.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		buttonIniciarSesion.setBounds(10, 212, 414, 39);
+		frame.getContentPane().add(buttonIniciarSesion);
+
+		labelError = new JLabel("");
+		labelError.setHorizontalAlignment(SwingConstants.CENTER);
 		labelError.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 		labelError.setForeground(Color.RED);
 		labelError.setBounds(10, 53, 414, 39);
 		frame.getContentPane().add(labelError);
+	}
+
+	public void setErrorMsg(String error) {
+		labelError.setText(error);
+		
 	}
 }
