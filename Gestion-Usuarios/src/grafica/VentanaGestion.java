@@ -1,18 +1,16 @@
 package grafica;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-
 import javax.swing.JTextField;
 import javax.swing.JButton;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JList;
@@ -45,7 +43,10 @@ public class VentanaGestion {
 	private JLabel lblBorrarSuccess;
 	private JButton btnBorrarUsuario;
 	//LISTAR USUARIOS
-	private JList listUsuarios;
+	private JScrollPane scrollPane;
+	private JList<String> listUsuarios;
+	private DefaultListModel<String> resultList;
+	private JButton btnListarUsuarios;
 
 	public VentanaGestion() {
 		controlador = new ControladorGestion(this);
@@ -98,7 +99,8 @@ public class VentanaGestion {
 		btnAgregarUsuario = new JButton("Agregar usuario");
 		btnAgregarUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO: AGREGAR
+				//controlar existe
+				controlador.crearUsuario(textAgregarUsuario.getText(), textAgregarPassword.getText());
 			}
 		});
 		btnAgregarUsuario.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
@@ -156,7 +158,8 @@ public class VentanaGestion {
 		btnBorrarUsuario = new JButton("Borrar usuario");
 		btnBorrarUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO: BORRAR
+				//controlar existe y si es valido
+				controlador.borrarUsuario(textBorrarUsuario.getText());
 			}
 		});
 		btnBorrarUsuario.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
@@ -189,12 +192,31 @@ public class VentanaGestion {
 		tabbedPane.addTab("Listar usuarios", null, list, null);
 		list.setLayout(null);
 		
-		listUsuarios = new JList();
+		btnListarUsuarios = new JButton("Listar todos los usuarios registrados");
+		btnListarUsuarios.setBounds(10, 11, 409, 39);
+		btnListarUsuarios.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e1) {
+				String[] listaUsuarios = controlador.listarUsuarios();
+				
+				for(int i = 0; i< listaUsuarios.length; i++)
+				{
+					resultList.clear();
+					resultList.addElement(listaUsuarios[i]);
+				}
+			}
+		});
+		btnListarUsuarios.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		list.add(btnListarUsuarios);
+		
+		resultList = new DefaultListModel<String>();
+		listUsuarios = new JList<String>();
+		listUsuarios.setModel(resultList);
 		listUsuarios.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
 		listUsuarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listUsuarios.setBounds(10, 11, 409, 212);
-		list.add(listUsuarios);
+		listUsuarios.setBounds(10, 61, 409, 162);
+		scrollPane = new JScrollPane(listUsuarios);
+		scrollPane.setBounds(10, 61, 409, 162);
+		list.add(scrollPane);
 		//FIN PANEL LISTAR USUARIOS
-		
 	}
 }

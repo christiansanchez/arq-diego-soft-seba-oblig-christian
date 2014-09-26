@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://logica" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://logica">
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://logica">
+            <xs:element name="existsUser">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="existsUserResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="validateUser">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="pwd" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="validateUserResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="listUsersResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="createUser">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="pwd" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="removeUser">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="removeUserRequest">
+        <wsdl:part name="parameters" element="ns:removeUser"/>
+    </wsdl:message>
+    <wsdl:message name="removeUserResponse"/>
+    <wsdl:message name="validateUserRequest">
+        <wsdl:part name="parameters" element="ns:validateUser"/>
+    </wsdl:message>
+    <wsdl:message name="validateUserResponse">
+        <wsdl:part name="parameters" element="ns:validateUserResponse"/>
+    </wsdl:message>
+    <wsdl:message name="existsUserRequest">
+        <wsdl:part name="parameters" element="ns:existsUser"/>
+    </wsdl:message>
+    <wsdl:message name="existsUserResponse">
+        <wsdl:part name="parameters" element="ns:existsUserResponse"/>
+    </wsdl:message>
+    <wsdl:message name="createUserRequest">
+        <wsdl:part name="parameters" element="ns:createUser"/>
+    </wsdl:message>
+    <wsdl:message name="createUserResponse"/>
+    <wsdl:message name="listUsersRequest"/>
+    <wsdl:message name="listUsersResponse">
+        <wsdl:part name="parameters" element="ns:listUsersResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="LoginPortType">
+        <wsdl:operation name="removeUser">
+            <wsdl:input message="ns:removeUserRequest" wsaw:Action="urn:removeUser"/>
+            <wsdl:output message="ns:removeUserResponse" wsaw:Action="urn:removeUserResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="validateUser">
+            <wsdl:input message="ns:validateUserRequest" wsaw:Action="urn:validateUser"/>
+            <wsdl:output message="ns:validateUserResponse" wsaw:Action="urn:validateUserResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="existsUser">
+            <wsdl:input message="ns:existsUserRequest" wsaw:Action="urn:existsUser"/>
+            <wsdl:output message="ns:existsUserResponse" wsaw:Action="urn:existsUserResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="createUser">
+            <wsdl:input message="ns:createUserRequest" wsaw:Action="urn:createUser"/>
+            <wsdl:output message="ns:createUserResponse" wsaw:Action="urn:createUserResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="listUsers">
+            <wsdl:input message="ns:listUsersRequest" wsaw:Action="urn:listUsers"/>
+            <wsdl:output message="ns:listUsersResponse" wsaw:Action="urn:listUsersResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="LoginSoap11Binding" type="ns:LoginPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="removeUser">
+            <soap:operation soapAction="urn:removeUser" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="validateUser">
+            <soap:operation soapAction="urn:validateUser" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="existsUser">
+            <soap:operation soapAction="urn:existsUser" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="listUsers">
+            <soap:operation soapAction="urn:listUsers" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createUser">
+            <soap:operation soapAction="urn:createUser" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="LoginSoap12Binding" type="ns:LoginPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="removeUser">
+            <soap12:operation soapAction="urn:removeUser" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="validateUser">
+            <soap12:operation soapAction="urn:validateUser" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="existsUser">
+            <soap12:operation soapAction="urn:existsUser" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="listUsers">
+            <soap12:operation soapAction="urn:listUsers" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createUser">
+            <soap12:operation soapAction="urn:createUser" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="LoginHttpBinding" type="ns:LoginPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="removeUser">
+            <http:operation location="Login/removeUser"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="removeUser"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="removeUser"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="validateUser">
+            <http:operation location="Login/validateUser"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="validateUser"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="validateUser"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="existsUser">
+            <http:operation location="Login/existsUser"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="existsUser"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="existsUser"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="listUsers">
+            <http:operation location="Login/listUsers"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="listUsers"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="listUsers"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createUser">
+            <http:operation location="Login/createUser"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="createUser"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="createUser"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="Login">
+        <wsdl:port name="LoginHttpSoap11Endpoint" binding="ns:LoginSoap11Binding">
+            <soap:address location="http://192.168.1.209:8080/axis2/services/Login.LoginHttpSoap11Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="LoginHttpSoap12Endpoint" binding="ns:LoginSoap12Binding">
+            <soap12:address location="http://192.168.1.209:8080/axis2/services/Login.LoginHttpSoap12Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="LoginHttpEndpoint" binding="ns:LoginHttpBinding">
+            <http:address location="http://192.168.1.209:8080/axis2/services/Login.LoginHttpEndpoint/"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
