@@ -10,13 +10,12 @@ import java.util.List;
 
 import javax.management.openmbean.InvalidOpenTypeException;
 
-public class PersistenciaGestion {
+public class PersistenciaGestion {//TODO: DARIN: Cuando y que es lo que hay que persistir????????? 
 
 	//Almacena los usuarios en un archivo de texto local.
 	
-	public void persistirUsuarios (String name, String pwd)
-	{
-		
+	public void persistirUsuario (String name, String pwd)
+	{		
 		try
 		{ 	
 			FileOutputStream archivo = new FileOutputStream("src/persistencia/usuarios.txt", true);
@@ -26,17 +25,14 @@ public class PersistenciaGestion {
 			objeto.close();
 			archivo.close();
 		}
-		catch(InvalidOpenTypeException e)
-		{
-			e.printStackTrace();
-		}
-		catch(IOException e)
+		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
 	}
 	
-	public boolean validarUsuario (String name, String pwd){
+	public boolean validarUsuario (String name, String pwd)
+	{
 		try {
 			FileInputStream archivo = new FileInputStream("src/persistencia/usuarios.txt");
 			ObjectInputStream objeto = new ObjectInputStream(archivo);
@@ -56,20 +52,16 @@ public class PersistenciaGestion {
 				
 				if(nameObj.equalsIgnoreCase(name) && pwdObj.equals(pwd))
 					return true;
-			}
+			}		
 			
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
 	}
 	
-	public boolean existeUsuario(String name){
+	public boolean existeUsuario(String name)
+	{
 		try {
 			FileInputStream archivo = new FileInputStream("src/persistencia/usuarios.txt");
 			ObjectInputStream objeto = new ObjectInputStream(archivo);
@@ -90,19 +82,15 @@ public class PersistenciaGestion {
 				if(nameObj.equalsIgnoreCase(name))
 					return true;
 			}
-			
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+					
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
 	}
 	
-	public void borrarUsuario (String name){
+	public void borrarUsuario (String name)
+	{
 		try {
 			FileInputStream archivo = new FileInputStream("src/persistencia/usuarios.txt");
 			ObjectInputStream objeto = new ObjectInputStream(archivo);
@@ -124,16 +112,10 @@ public class PersistenciaGestion {
 					listaObj.remove(i);
 					break;
 				}
-			}
+			}	
 			
-			
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		
+		}	
 	}
 }

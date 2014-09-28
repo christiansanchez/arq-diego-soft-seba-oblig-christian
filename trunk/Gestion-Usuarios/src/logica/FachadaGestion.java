@@ -1,9 +1,6 @@
 package logica;
 
-import java.rmi.RemoteException;
-
-import org.apache.axis2.AxisFault;
-
+import persistencia.PersistenciaGestion;
 import logica.LoginStub.CreateUser;
 import logica.LoginStub.ExistsUser;
 import logica.LoginStub.ExistsUserResponse;
@@ -17,6 +14,7 @@ public class FachadaGestion {
 	private static FachadaGestion instancia = null;
 	private String url;
 	private LoginStub cliente;
+	private PersistenciaGestion persistencia;
 
 	public synchronized static FachadaGestion getInstancia ()
 	{
@@ -29,64 +27,64 @@ public class FachadaGestion {
 		this.url = "http://127.0.0.1:8080/axis2/services/" + "Login.LoginHttpEndpoint/";
 		try {
 			this.cliente = new LoginStub(url);
-		} catch (AxisFault e) {
+			this.persistencia = new PersistenciaGestion();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
-	public void crearUsuario(String name, String pwd){
-		//Controlar que el usuario no exista
+	
+	public boolean existeUsuario(String name)
+	{
+		ExistsUser reqExistsUsr = new ExistsUser();
+		ExistsUserResponse respExistsUsr = new ExistsUserResponse();
 		try {
-			ExistsUser reqExistsUsr = new ExistsUser();
-			ExistsUserResponse respExistsUsr = new ExistsUserResponse();
-			
 			reqExistsUsr.setName(name);
 			respExistsUsr = cliente.existsUser(reqExistsUsr);
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return respExistsUsr.get_return();
+	}
+
+	/*PRECONDICION: El usuario no existe*/
+	public void crearUsuario(String name, String pwd)
+	{	
+		try {
+			CreateUser cu = new CreateUser();
+			cu.setName(name);
+			cu.setPwd(pwd);		
+			cliente.createUser(cu);
 			
-			if(!respExistsUsr.get_return()){
-				CreateUser cu = new CreateUser();
-				cu.setName(name);
-				cu.setPwd(pwd);
-				
-				cliente.createUser(cu);
-			}
-			else{
-				//Mensaje el usuario ya exsite
-			}
-		} catch (RemoteException e) {
+			persistencia.persistirUsuario(name, pwd);
+		
+		} catch (Exception e) {
 			e.printStackTrace();
 		}	
 	}
 	
-	public void borrarUsuario(String name){
-		//Controlar que el usuario no exista
+	/*PRECONDICION: El usuario existe*/
+	public void borrarUsuario(String name)
+	{
 		try {
-			ExistsUser reqExistsUsr = new ExistsUser();
-			ExistsUserResponse respExistsUsr = new ExistsUserResponse();
+			RemoveUser remUser = new RemoveUser();
+			remUser.setName(name);	
+			cliente.removeUser(remUser);
 			
-			reqExistsUsr.setName(name);			
-			respExistsUsr = cliente.existsUser(reqExistsUsr);
-			
-			if(respExistsUsr.get_return()){
-				RemoveUser remUser = new RemoveUser();
-				remUser.setName(name);
-				
-				cliente.removeUser(remUser);
-			}
-			else{
-				//Mensaje el usuario no exsite
-			}
-		} catch (RemoteException e) {
+			persistencia.borrarUsuario(name);
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public String listarUsuarios(){
-		ListUsersResponse listUsrResp = null;
+	public String listarUsuarios()
+	{
+		ListUsersResponse listUsrResp = new ListUsersResponse();
 		try {	
-			listUsrResp = new ListUsersResponse();
 			listUsrResp = cliente.listUsers();
-		} catch (RemoteException e) {
+		
+		} catch (Exception e) {
 			e.printStackTrace();
 		}	
 		return listUsrResp.get_return();
@@ -94,18 +92,16 @@ public class FachadaGestion {
 	
 	public boolean validarUsuario (String name, String pwd)
 	{
-		ValidateUserResponse valUsrResp = null;
-		try {
-			ValidateUser reqValidar = new ValidateUser();
-			valUsrResp = new ValidateUserResponse();
-		
+		ValidateUser reqValidar = new ValidateUser();
+		ValidateUserResponse valUsrResp = new ValidateUserResponse();
+		try {	
 			reqValidar.setName(name);
 			reqValidar.setPwd(pwd);	
 			valUsrResp = cliente.validateUser(reqValidar);
-		} catch (RemoteException e) {
+		
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return valUsrResp.get_return();
 	}
 
