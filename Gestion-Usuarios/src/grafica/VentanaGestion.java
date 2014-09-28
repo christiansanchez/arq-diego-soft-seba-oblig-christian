@@ -24,6 +24,8 @@ public class VentanaGestion {
 	private JPanel create;
 	private JPanel delete;
 	private JPanel list;
+	private boolean existUsr;
+	private boolean validUsr;
 	//CREAR USUARIO
 	private JLabel lblAgregarUsuario;
 	private JLabel lblAgregarPassword;
@@ -96,23 +98,6 @@ public class VentanaGestion {
 		create.add(textAgregarPassword);
 		textAgregarPassword.setColumns(10);
 		
-		btnAgregarUsuario = new JButton("Agregar usuario");
-		btnAgregarUsuario.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//controlar existe
-				controlador.crearUsuario(textAgregarUsuario.getText(), textAgregarPassword.getText());
-			}
-		});
-		btnAgregarUsuario.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		btnAgregarUsuario.setBounds(10, 149, 409, 39);
-		create.add(btnAgregarUsuario);
-		
-		lblAgregarTitulo = new JLabel("Ingrese un usuario y un password");
-		lblAgregarTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblAgregarTitulo.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		lblAgregarTitulo.setBounds(10, 11, 409, 31);
-		create.add(lblAgregarTitulo);
-		
 		lblAgregarError = new JLabel("");
 		lblAgregarError.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAgregarError.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
@@ -126,6 +111,30 @@ public class VentanaGestion {
 		lblAgregarSuccess.setForeground(Color.GREEN);
 		lblAgregarSuccess.setBounds(10, 184, 409, 39);
 		create.add(lblAgregarSuccess);
+		
+		btnAgregarUsuario = new JButton("Agregar usuario");
+		btnAgregarUsuario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblAgregarError.setText("");
+				lblAgregarSuccess.setText("");
+				existUsr = controlador.existeUsuario(textAgregarUsuario.getText());
+				if(existUsr){
+					lblAgregarError.setText("Error: el usuario ya existe.");
+				} else {
+					controlador.crearUsuario(textAgregarUsuario.getText(), textAgregarPassword.getText());
+					lblAgregarSuccess.setText("Usuario agregado!");
+				}
+			}
+		});
+		btnAgregarUsuario.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		btnAgregarUsuario.setBounds(10, 149, 409, 39);
+		create.add(btnAgregarUsuario);
+		
+		lblAgregarTitulo = new JLabel("Ingrese un usuario y un password");
+		lblAgregarTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAgregarTitulo.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		lblAgregarTitulo.setBounds(10, 11, 409, 31);
+		create.add(lblAgregarTitulo);
 		//FIN PANEL CREAR USUARIO
 		
 		//COMIENZO PANEL BORRAR USUARIO
@@ -155,23 +164,6 @@ public class VentanaGestion {
 		delete.add(textBorrarPassword);
 		textBorrarPassword.setColumns(10);
 		
-		btnBorrarUsuario = new JButton("Borrar usuario");
-		btnBorrarUsuario.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//controlar existe y si es valido
-				controlador.borrarUsuario(textBorrarUsuario.getText());
-			}
-		});
-		btnBorrarUsuario.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		btnBorrarUsuario.setBounds(10, 149, 409, 39);
-		delete.add(btnBorrarUsuario);
-		
-		lblBorrarTitulo = new JLabel("Ingrese su usuario y password");
-		lblBorrarTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblBorrarTitulo.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		lblBorrarTitulo.setBounds(10, 11, 409, 31);
-		delete.add(lblBorrarTitulo);
-		
 		lblBorrarError = new JLabel("");
 		lblBorrarError.setHorizontalAlignment(SwingConstants.CENTER);
 		lblBorrarError.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
@@ -185,6 +177,35 @@ public class VentanaGestion {
 		lblBorrarSuccess.setForeground(Color.GREEN);
 		lblBorrarSuccess.setBounds(10, 184, 409, 39);
 		delete.add(lblBorrarSuccess);
+		
+		btnBorrarUsuario = new JButton("Borrar usuario");
+		btnBorrarUsuario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblBorrarError.setText("");
+				lblBorrarSuccess.setText("");
+				existUsr = controlador.existeUsuario(textBorrarUsuario.getText());
+				if(existUsr){
+					validUsr = controlador.validarUsuario(textBorrarUsuario.getText(), textBorrarPassword.getText());
+					if(validUsr){
+						controlador.borrarUsuario(textBorrarUsuario.getText());
+						lblBorrarSuccess.setText("Usuario borrado!");
+					} else {
+						lblBorrarError.setText("Error: Verifique usuario y password e intente nuevamente.");
+					}
+				} else {
+					lblBorrarError.setText("Error: el usuario no existe.");	
+				}
+			}
+		});
+		btnBorrarUsuario.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		btnBorrarUsuario.setBounds(10, 149, 409, 39);
+		delete.add(btnBorrarUsuario);
+		
+		lblBorrarTitulo = new JLabel("Ingrese su usuario y password");
+		lblBorrarTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+		lblBorrarTitulo.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
+		lblBorrarTitulo.setBounds(10, 11, 409, 31);
+		delete.add(lblBorrarTitulo);
 		//FIN PANEL BORRAR USUARIO
 		
 		//COMIENZO PANEL LISTAR USUARIOS
@@ -197,10 +218,9 @@ public class VentanaGestion {
 		btnListarUsuarios.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e1) {
 				String[] listaUsuarios = controlador.listarUsuarios();
-				
+				resultList.clear();
 				for(int i = 0; i< listaUsuarios.length; i++)
 				{
-					resultList.clear();
 					resultList.addElement(listaUsuarios[i]);
 				}
 			}
