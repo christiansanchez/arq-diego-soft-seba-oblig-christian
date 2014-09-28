@@ -73,7 +73,13 @@ public class VentanaLogin {
 		buttonIniciarSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				controlador.iniciarSesion(textUsuario.getText(), pwdPassword.getPassword());
+				labelError.setText("");
+				boolean validUsr = controlador.validarUsuario(textUsuario.getText(), pwdPassword.getPassword());
+				if(validUsr){
+					controlador.iniciarSesion(textUsuario.getText(), pwdPassword.getPassword());
+				} else{
+					labelError.setText("Error al iniciar sesi\u00F3n, intente nuevamente");
+				}
 			}
 		});
 		buttonIniciarSesion.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
@@ -88,8 +94,4 @@ public class VentanaLogin {
 		frame.getContentPane().add(labelError);
 	}
 
-	public void setErrorMsg(String error) {
-		labelError.setText(error);
-		
-	}
 }
