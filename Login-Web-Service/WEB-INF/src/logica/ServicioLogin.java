@@ -16,9 +16,7 @@ public class ServicioLogin {
 	
 	public boolean existsUser (String name){
 		/* verifica si existe el usuario en el hashtable */
-		boolean exist = usuarios.containsKey(name);
-		
-		return exist;
+		return usuarios.containsKey(name);
 	}
 	
 	public void createUser (String name, String pwd){
@@ -45,7 +43,6 @@ public class ServicioLogin {
 				isValid = true;
 			}
 		}
-		
 		return isValid;
 	}
 	
@@ -56,10 +53,9 @@ public class ServicioLogin {
 		Enumeration<String> keys = usuarios.keys();
 		while(keys.hasMoreElements()){
 			users.append(keys.nextElement());
-			//TODO: DARIN: CONTROLAR QUE SI ES EL ULTIMO ELEMENTO NO LE AGREGUE LA COMA AL FINAL.
-			users.append(", ");
+			if(keys.hasMoreElements())
+				users.append(", ");
 		}
-		
 		return users.toString();
 	}
 	
