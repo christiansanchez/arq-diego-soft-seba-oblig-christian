@@ -16,24 +16,24 @@ public class FachadaGestion {
 	private LoginStub cliente;
 	private PersistenciaGestion persistencia;
 
-	public synchronized static FachadaGestion getInstancia ()
+	public synchronized static FachadaGestion getInstancia () throws Exception
 	{
 		if (instancia == null)
 			instancia = new FachadaGestion();
 		return instancia;
 	}
 
-	public FachadaGestion() {
+	public FachadaGestion() throws Exception {
 		this.url = "http://127.0.0.1:8080/axis2/services/" + "Login.LoginHttpEndpoint/";
 		try {
 			this.cliente = new LoginStub(url);
 			this.persistencia = new PersistenciaGestion();
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new Exception();
 		}
 	}
 	
-	public boolean existeUsuario(String name)
+	public boolean existeUsuario(String name) throws Exception
 	{
 		ExistsUser reqExistsUsr = new ExistsUser();
 		ExistsUserResponse respExistsUsr = new ExistsUserResponse();
@@ -42,55 +42,52 @@ public class FachadaGestion {
 			respExistsUsr = cliente.existsUser(reqExistsUsr);
 		
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new Exception();
 		}
 		return respExistsUsr.get_return();
 	}
 
 	/*PRECONDICION: El usuario no existe*/
-	public void crearUsuario(String name, String pwd)
+	public void crearUsuario(String name, String pwd) throws Exception
 	{	
+		CreateUser cu = new CreateUser();
 		try {
-			CreateUser cu = new CreateUser();
 			cu.setName(name);
 			cu.setPwd(pwd);		
 			cliente.createUser(cu);
-			
 			persistencia.persistirUsuario(name, pwd);
 		
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new Exception();
 		}	
 	}
 	
 	/*PRECONDICION: El usuario existe*/
-	public void borrarUsuario(String name)
+	public void borrarUsuario(String name) throws Exception
 	{
 		try {
 			RemoveUser remUser = new RemoveUser();
 			remUser.setName(name);	
 			cliente.removeUser(remUser);
-			
-			persistencia.borrarUsuario(name);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new Exception();
 		}
 	}
 	
-	public String listarUsuarios()
+	public String listarUsuarios() throws Exception
 	{
 		ListUsersResponse listUsrResp = new ListUsersResponse();
 		try {	
 			listUsrResp = cliente.listUsers();
 		
 		} catch (Exception e) {
-			e.printStackTrace();
-		}	
+			throw new Exception();
+		}
 		return listUsrResp.get_return();
 	}
 	
-	public boolean validarUsuario (String name, String pwd)
+	public boolean validarUsuario (String name, String pwd) throws Exception
 	{
 		ValidateUser reqValidar = new ValidateUser();
 		ValidateUserResponse valUsrResp = new ValidateUserResponse();
@@ -100,7 +97,7 @@ public class FachadaGestion {
 			valUsrResp = cliente.validateUser(reqValidar);
 		
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new Exception();
 		}
 		return valUsrResp.get_return();
 	}

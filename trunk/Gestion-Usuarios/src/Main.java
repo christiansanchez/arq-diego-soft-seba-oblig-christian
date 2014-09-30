@@ -1,15 +1,17 @@
 import grafica.VentanaGestion;
 
-
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
+		VentanaGestion window = null;
 		try {
-			VentanaGestion window = new VentanaGestion();
+			if(window == null){
+				window = new VentanaGestion();
+			}
+			
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new Exception();
 		}
-
 	}
 
 }
