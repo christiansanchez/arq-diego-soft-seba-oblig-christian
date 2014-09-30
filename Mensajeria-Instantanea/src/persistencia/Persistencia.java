@@ -1,19 +1,17 @@
 package persistencia; 
+
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectOutputStream;
-import javax.management.openmbean.InvalidOpenTypeException;
 
 public class Persistencia 
 {
-	public void persistirMensaje (String ipEmisor, String mensaje)
+	public void persistirMensaje (String ipEmisor, String mensaje) throws Exception
 	{
 		/*
 		 * 1. agrego al archivo de texto que contiene el historial de mensajes recibidos
 		 *    el mensaje recibido junto con la dirección IP del emisor
 		 */
-		try
-		{ 	
+		try { 	
 			FileOutputStream archivo = new FileOutputStream("src/persistencia/historial.txt", true);
 			ObjectOutputStream objeto = new ObjectOutputStream(archivo);
 
@@ -21,14 +19,9 @@ public class Persistencia
 			objeto.writeObject (mensaje);
 			objeto.close();
 			archivo.close();
-		}
-		catch(InvalidOpenTypeException e)
-		{
-			e.printStackTrace();			
-		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
+		
+		} catch(Exception e){
+			throw new Exception();			
 		}
 	}
 }

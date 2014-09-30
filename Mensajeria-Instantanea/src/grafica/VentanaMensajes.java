@@ -3,12 +3,14 @@ package grafica;
 import java.awt.Frame;
 import java.awt.TextArea;
 
+import javax.swing.JOptionPane;
+
 public class VentanaMensajes
 {
 	private ControladorMensajes controlador = null;
-	
-	private Frame frame = null;  //  @jve:decl-index=0:visual-constraint="145,18"
+	private Frame frame = null;
 	private TextArea textAreaMensaje = null;
+	
 	public Frame getFrame()
 	{
 		if (frame == null)
@@ -40,17 +42,26 @@ public class VentanaMensajes
 
 	public VentanaMensajes ()
 	{
-		this.getFrame().setVisible(true);
-		controlador = new ControladorMensajes(this);
-		/*
-		 * 1. pongo al controlador a recibirMensajes
-		 */
-		Thread hilo = new Thread(){
-			public void run()
-			{
-				controlador.recibirMensajes();
-			}
-		};
-		hilo.start();
+		try{
+			this.getFrame().setVisible(true);
+			controlador = new ControladorMensajes(this);
+			/*
+			 * 1. pongo al controlador a recibirMensajes
+			 */
+			Thread hilo = new Thread(){
+				public void run()
+				{
+					try {
+						controlador.recibirMensajes();
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(null, "Ups! Ocurrio un error interno, intente nuevamente..", "Error!", JOptionPane.ERROR_MESSAGE);
+					}	
+				}
+			};
+			hilo.start();
+		
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Ups! Ocurrio un error interno, intente nuevamente..", "Error!", JOptionPane.ERROR_MESSAGE);
+		}	
 	}
 }

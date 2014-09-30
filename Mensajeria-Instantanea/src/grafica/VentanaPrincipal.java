@@ -8,19 +8,17 @@ import java.awt.Panel;
 import java.awt.GridLayout;
 import java.awt.TextField;
 
+import javax.swing.JOptionPane;
+
 public class VentanaPrincipal
 {
 	private ControladorPrincipal controlador = null;
-	
-	private Frame frame = null;  //  @jve:decl-index=0:visual-constraint="122,19"
+	private Frame frame = null;
 	private Label labelSeleccioneEquipo = null;
-	private Button buttonEnviarMensaje = null;  //  @jve:decl-index=0:visual-constraint="485,128"
+	private Button buttonEnviarMensaje = null;
 	private List listEquiposActivos = null;
-
 	private Panel panel = null;
-
 	private Button buttonDifundirEstoyActivo = null;
-
 	private TextField textFieldMensaje = null;
 
 	public Frame getFrame()
@@ -90,7 +88,11 @@ public class VentanaPrincipal
 							/*
 							 * 1. Le pido al controlador que difunda que estoy activo
 							 */
-							controlador.difundirEstoyActivo();
+							try {
+								controlador.difundirEstoyActivo();
+							} catch (Exception e1) {
+								JOptionPane.showMessageDialog(null, "Ups! Ocurrio un error interno, intente nuevamente..", "Error!", JOptionPane.ERROR_MESSAGE);
+							}	
 						}
 					});
 		}
@@ -114,11 +116,15 @@ public class VentanaPrincipal
 					 *    y le pido a mi controlador que se lo envíe al equipo seleccionado
 					 * 4. le pido al controlador que muestre la ventana de mensajes
 					 */
-					String ip = getListEquiposActivos().getSelectedItem();
-					if(ip != null){
-						controlador.enviarMensaje(textFieldMensaje.getText(), ip);
-					}
-					controlador.mostrarVentanaMensajes();
+					try{
+						String ip = getListEquiposActivos().getSelectedItem();
+						if(ip != null){
+							controlador.enviarMensaje(textFieldMensaje.getText(), ip);
+						}
+						controlador.mostrarVentanaMensajes();
+					} catch (Exception e2) {
+						JOptionPane.showMessageDialog(null, "Ups! Ocurrio un error interno, intente nuevamente..", "Error!", JOptionPane.ERROR_MESSAGE);
+					}	
 				}
 			});
 		}
@@ -136,11 +142,25 @@ public class VentanaPrincipal
 
 	public VentanaPrincipal ()
 	{
-		this.getFrame().setVisible(true);
-		controlador = new ControladorPrincipal(this);
-		/*
-		 * 1. pongo al controlador a recibirEquiposActivos
-		 */
-		controlador.recibirEquiposActivos();
+		try{
+			this.getFrame().setVisible(true);
+			controlador = new ControladorPrincipal(this);
+			/*
+			 * 1. pongo al controlador a recibirEquiposActivos
+			 */
+			Thread hilo = new Thread(){
+				public void run()
+				{
+					try {
+						controlador.recibirEquiposActivos();
+					} catch (Exception e) {
+						JOptionPane.showMessageDialog(null, "Ups! Ocurrio un error interno, intente nuevamente..", "Error!", JOptionPane.ERROR_MESSAGE);
+					}	
+				}
+			};
+			hilo.start();
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Ups! Ocurrio un error interno, intente nuevamente..", "Error!", JOptionPane.ERROR_MESSAGE);
+		}	
 	}
 }

@@ -6,6 +6,7 @@ import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -26,9 +27,13 @@ public class VentanaLogin {
 	private JLabel labelError;
 
 	public VentanaLogin() {
-		controlador = new ControladorLogin(this);
-		initialize();
-		this.getFrame().setVisible(true);
+		try{
+			controlador = new ControladorLogin(this);
+			initialize();
+			this.getFrame().setVisible(true);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Ups! Ocurrio un error interno, intente nuevamente..", "Error!", JOptionPane.ERROR_MESSAGE);
+		}	
 	}
 
 	public JFrame getFrame(){
@@ -74,11 +79,16 @@ public class VentanaLogin {
 			public void actionPerformed(ActionEvent e) 
 			{
 				labelError.setText("");
-				boolean validUsr = controlador.validarUsuario(textUsuario.getText(), pwdPassword.getPassword());
-				if(validUsr){
-					controlador.iniciarSesion(textUsuario.getText(), pwdPassword.getPassword());
-				} else{
-					labelError.setText("Error al iniciar sesi\u00F3n, intente nuevamente");
+				try {
+					boolean validUsr = controlador.validarUsuario(textUsuario.getText(), pwdPassword.getPassword());
+					if(validUsr){
+						controlador.iniciarSesion(textUsuario.getText(), pwdPassword.getPassword());
+					} else{
+						labelError.setText("Error al iniciar sesi\u00F3n, intente nuevamente");
+					}
+				
+				} catch(Exception e1){
+					JOptionPane.showMessageDialog(null, "Ups! Ocurrio un error interno, intente nuevamente..", "Error!", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

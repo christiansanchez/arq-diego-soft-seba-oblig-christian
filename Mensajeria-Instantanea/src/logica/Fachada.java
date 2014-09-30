@@ -5,12 +5,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.rmi.RemoteException;
-
 import logica.LoginStub.ValidateUser;
 import logica.LoginStub.ValidateUserResponse;
-
-import org.apache.axis2.AxisFault;
-
 import persistencia.Persistencia;
 
 public class Fachada 
@@ -21,7 +17,7 @@ public class Fachada
 	private DatagramSocket socketEnvioMensajes = null;
 	private DatagramSocket socketRecepcionMensajes = null;
 	
-	private Fachada ()
+	private Fachada () throws Exception
 	{
 		/*
 		 * 1. creo socketDifusion en el puerto 5001 para difundir que estoy activo
@@ -35,18 +31,22 @@ public class Fachada
 			socketEnvioMensajes = new DatagramSocket(5003);
 			socketRecepcionMensajes = new DatagramSocket(5004);
 		} catch (SocketException e) {
-			e.printStackTrace();
+			throw new Exception();
 		}
 	}
 	
-	public synchronized static Fachada getInstancia ()
+	public synchronized static Fachada getInstancia () throws Exception
 	{
-		if (instancia == null)
-			instancia = new Fachada();
+		try {
+			if (instancia == null)
+				instancia = new Fachada();
+		} catch(Exception e){
+			throw new Exception();
+		}
 		return instancia;
 	}
 	
-	public void difundirEstoyActivo ()
+	public void difundirEstoyActivo () throws Exception
 	{
 		/* 
 		 * Procedo a enviar un mensaje en broadcast difundiendo que estoy activo
@@ -61,11 +61,11 @@ public class Fachada
 			socketDifusion.send(dp);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new Exception();
 		}
 	}
 	
-	public String recibirEquipoActivo ()
+	public String recibirEquipoActivo () throws Exception
 	{
 		String ipEmisor = null;
 		/*
@@ -85,14 +85,15 @@ public class Fachada
 			}else{
 				ipEmisor = "ninguna";
 			}
+		
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new Exception();
 		}
 		
 		return ipEmisor;
 	}
 
-	public void enviarMensaje (String mensaje, String ipEquipoSeleccionado)
+	public void enviarMensaje (String mensaje, String ipEquipoSeleccionado) throws Exception
 	{
 		/* 
 		 * Procedo a enviar el mensaje a la direccion IP del equipo seleccionado
@@ -106,11 +107,11 @@ public class Fachada
 			socketEnvioMensajes.send(dp);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new Exception();
 		}
 	}
 
-	public String recibirMensaje ()
+	public String recibirMensaje () throws Exception
 	{
 		String mensaje = null;
 		/*
@@ -130,15 +131,14 @@ public class Fachada
 			p.persistirMensaje(dp.getAddress().getHostAddress(), mensaje);
 
 			mensaje = dp.getAddress().getHostAddress() + ":" + mensaje;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		
+		} catch (Exception e) {
+			throw new Exception();
+		}		
 		return mensaje;
 	}
 
-	public boolean validateUser (String name, String pwd){
-		//TODO: DARIN: consumir desde web service
+	public boolean validateUser (String name, String pwd) throws Exception{
 		String url = "http://127.0.0.1:8080/axis2/services/" + "Login.LoginHttpEndpoint/";
 
 		LoginStub cliente;
@@ -147,12 +147,12 @@ public class Fachada
 		try {
 			cliente = new LoginStub(url);	
 			reqValidar.setName(name);
-			reqValidar.setPwd(pwd);	
+			reqValidar.setPwd(pwd);
 			valUsrResp = cliente.validateUser(reqValidar);
+			
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			throw new Exception();
 		}
-
 		return valUsrResp.get_return();
 	}
 }

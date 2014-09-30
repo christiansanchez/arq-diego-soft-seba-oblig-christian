@@ -8,22 +8,32 @@ public class ControladorPrincipal
 	private VentanaMensajes ventanaMensajes = null;
 	private Fachada fachada;
 	
-	public ControladorPrincipal (VentanaPrincipal ventana)
+	public ControladorPrincipal (VentanaPrincipal ventana) throws Exception
 	{
-		this.ventanaPrincipal = ventana;
-		fachada = Fachada.getInstancia();
+		try{
+			this.ventanaPrincipal = ventana;
+			fachada = Fachada.getInstancia();
+		
+		} catch(Exception e){
+			throw new Exception();
+		}
 	}
 	
-	public void difundirEstoyActivo ()
+	public void difundirEstoyActivo () throws Exception
 	{
 		/*
 		 * 1. Difundo a través de la fachada que estoy activo
 		 */
-		fachada.difundirEstoyActivo();
+		try {
+			fachada.difundirEstoyActivo();
+		
+		} catch (Exception e) {
+			throw new Exception();
+		}
 		
 	}
 	
-	public void recibirEquiposActivos ()
+	public void recibirEquiposActivos () throws Exception
 	{
 		/*
 		 * Establezco un LOOP infinito que realiza las siguientes acciones:
@@ -32,20 +42,30 @@ public class ControladorPrincipal
 		 * 3. En otro caso, actualizo la lista de equipos activos de la VentanaPrincipal
 		 *    con la dirección IP del equipo activo que fue recibida
 		 */
-		 while(true){
-			 String ip = fachada.recibirEquipoActivo();
-			 if(!ip.equals("ninguna")){
-				 ventanaPrincipal.getListEquiposActivos().add(ip);
-			 }
-		 }
+		try{
+			 while(true){
+				 String ip = fachada.recibirEquipoActivo();
+				 if(!ip.equals("ninguna")){
+					 ventanaPrincipal.getListEquiposActivos().add(ip);
+				 }
+			}
+			 
+		} catch(Exception e1){
+			throw new Exception();
+		}
 	}
 	
-	public void enviarMensaje (String mensaje, String ipEquipoSeleccionado)
+	public void enviarMensaje (String mensaje, String ipEquipoSeleccionado) throws Exception
 	{
 		/*
 		 * 1. Envío a través de la fachada el mensaje recibido al equipo seleccionado
 		 */
-		fachada.enviarMensaje(mensaje, ipEquipoSeleccionado);
+		try {
+			fachada.enviarMensaje(mensaje, ipEquipoSeleccionado);
+		
+		} catch (Exception e) {
+			throw new Exception();
+		}
 	}
 	
 	public void mostrarVentanaMensajes ()

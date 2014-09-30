@@ -2,13 +2,15 @@ import grafica.VentanaLogin;
 
 public class Main
 {
-	public static void main(String[] args)
+	public static void main(String[] args) throws Exception
 	{
+		VentanaLogin window = null;
 		try {
-			VentanaLogin window = new VentanaLogin();
+			if(window == null){
+				window = new VentanaLogin();
+			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new Exception();
 		}
-		//new VentanaPrincipal();
 	}
 }
