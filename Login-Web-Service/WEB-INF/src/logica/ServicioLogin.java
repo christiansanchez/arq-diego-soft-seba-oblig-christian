@@ -15,7 +15,7 @@ public class ServicioLogin {
 	}
 	
 	public boolean existsUser (String name){
-		/* verifica si existe el usuario en el hashtable */
+		/* verifica si existe el usuario en el hashtable */		
 		return usuarios.containsKey(name);
 	}
 	
