@@ -2,17 +2,22 @@ package grafica;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+
 import java.awt.Color;
 import java.awt.Font;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
@@ -25,7 +30,6 @@ public class VentanaGestion {
 	private JPanel delete;
 	private JPanel list;
 	private boolean existUsr;
-	private boolean validUsr;
 	//CREAR USUARIO
 	private JLabel lblAgregarUsuario;
 	private JLabel lblAgregarPassword;
@@ -37,9 +41,7 @@ public class VentanaGestion {
 	private JButton btnAgregarUsuario;
 	//BORRAR USUARIO
 	private JLabel lblBorrarUsuario;
-	private JLabel lblBorrarPassword;
 	private JTextField textBorrarUsuario;
-	private JTextField textBorrarPassword;
 	private JLabel lblBorrarTitulo;
 	private JLabel lblBorrarError;
 	private JLabel lblBorrarSuccess;
@@ -51,9 +53,14 @@ public class VentanaGestion {
 	private JButton btnListarUsuarios;
 
 	public VentanaGestion() {
-		controlador = new ControladorGestion(this);
-		initialize();
-		this.getFrame().setVisible(true);
+		try {
+			controlador = new ControladorGestion(this);
+			initialize();
+			this.getFrame().setVisible(true);
+		
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Ups! Ocurrio un error interno, intente nuevamente..", "Error!", JOptionPane.ERROR_MESSAGE);
+		}	
 	}
 	
 	public JFrame getFrame(){
@@ -108,7 +115,7 @@ public class VentanaGestion {
 		lblAgregarSuccess = new JLabel("");
 		lblAgregarSuccess.setHorizontalAlignment(SwingConstants.CENTER);
 		lblAgregarSuccess.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		lblAgregarSuccess.setForeground(Color.GREEN);
+		lblAgregarSuccess.setForeground(new Color(0,100,0));
 		lblAgregarSuccess.setBounds(10, 184, 409, 39);
 		create.add(lblAgregarSuccess);
 		
@@ -117,12 +124,17 @@ public class VentanaGestion {
 			public void actionPerformed(ActionEvent e) {
 				lblAgregarError.setText("");
 				lblAgregarSuccess.setText("");
-				existUsr = controlador.existeUsuario(textAgregarUsuario.getText());
-				if(existUsr){
-					lblAgregarError.setText("Error: el usuario ya existe.");
-				} else {
-					controlador.crearUsuario(textAgregarUsuario.getText(), textAgregarPassword.getText());
-					lblAgregarSuccess.setText("Usuario agregado!");
+				try {
+					existUsr = controlador.existeUsuario(textAgregarUsuario.getText());
+					if(existUsr){
+						lblAgregarError.setText("Error: el usuario ya existe.");
+					} else {
+						controlador.crearUsuario(textAgregarUsuario.getText(), textAgregarPassword.getText());
+						lblAgregarSuccess.setText("Usuario agregado!");
+					}
+				
+				} catch(Exception e1){
+					JOptionPane.showMessageDialog(null, "Ups! Ocurrio un error interno, intente nuevamente..", "Error!", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -147,22 +159,11 @@ public class VentanaGestion {
 		lblBorrarUsuario.setBounds(10, 59, 105, 31);
 		delete.add(lblBorrarUsuario);
 		
-		lblBorrarPassword = new JLabel("Password:");
-		lblBorrarPassword.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		lblBorrarPassword.setBounds(10, 101, 109, 31);
-		delete.add(lblBorrarPassword);
-		
 		textBorrarUsuario = new JTextField();
 		textBorrarUsuario.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 		textBorrarUsuario.setBounds(129, 59, 290, 31);
 		delete.add(textBorrarUsuario);
 		textBorrarUsuario.setColumns(10);
-		
-		textBorrarPassword = new JTextField();
-		textBorrarPassword.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		textBorrarPassword.setBounds(129, 104, 290, 31);
-		delete.add(textBorrarPassword);
-		textBorrarPassword.setColumns(10);
 		
 		lblBorrarError = new JLabel("");
 		lblBorrarError.setHorizontalAlignment(SwingConstants.CENTER);
@@ -174,7 +175,7 @@ public class VentanaGestion {
 		lblBorrarSuccess = new JLabel("");
 		lblBorrarSuccess.setHorizontalAlignment(SwingConstants.CENTER);
 		lblBorrarSuccess.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
-		lblBorrarSuccess.setForeground(Color.GREEN);
+		lblBorrarSuccess.setForeground(new Color(0,100,0));
 		lblBorrarSuccess.setBounds(10, 184, 409, 39);
 		delete.add(lblBorrarSuccess);
 		
@@ -183,17 +184,17 @@ public class VentanaGestion {
 			public void actionPerformed(ActionEvent e) {
 				lblBorrarError.setText("");
 				lblBorrarSuccess.setText("");
-				existUsr = controlador.existeUsuario(textBorrarUsuario.getText());
-				if(existUsr){
-					validUsr = controlador.validarUsuario(textBorrarUsuario.getText(), textBorrarPassword.getText());
-					if(validUsr){
+				try {
+					existUsr = controlador.existeUsuario(textBorrarUsuario.getText());
+					if(existUsr){
 						controlador.borrarUsuario(textBorrarUsuario.getText());
 						lblBorrarSuccess.setText("Usuario borrado!");
 					} else {
-						lblBorrarError.setText("Error: Verifique usuario y password e intente nuevamente.");
+						lblBorrarError.setText("Error: el usuario no existe.");	
 					}
-				} else {
-					lblBorrarError.setText("Error: el usuario no existe.");	
+				
+				} catch(Exception e2){
+					JOptionPane.showMessageDialog(null, "Ups! Ocurrio un error interno, intente nuevamente..", "Error!", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -201,7 +202,7 @@ public class VentanaGestion {
 		btnBorrarUsuario.setBounds(10, 149, 409, 39);
 		delete.add(btnBorrarUsuario);
 		
-		lblBorrarTitulo = new JLabel("Ingrese su usuario y password");
+		lblBorrarTitulo = new JLabel("Ingrese su usuario");
 		lblBorrarTitulo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblBorrarTitulo.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 20));
 		lblBorrarTitulo.setBounds(10, 11, 409, 31);
@@ -217,11 +218,16 @@ public class VentanaGestion {
 		btnListarUsuarios.setBounds(10, 11, 409, 39);
 		btnListarUsuarios.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e1) {
-				String[] listaUsuarios = controlador.listarUsuarios();
-				resultList.clear();
-				for(int i = 0; i< listaUsuarios.length; i++)
-				{
-					resultList.addElement(listaUsuarios[i]);
+				try {
+					String[] listaUsuarios = controlador.listarUsuarios();
+					resultList.clear();
+					for(int i = 0; i< listaUsuarios.length; i++)
+					{
+						resultList.addElement(listaUsuarios[i]);
+					}
+				
+				} catch(Exception e3){
+					JOptionPane.showMessageDialog(null, "Ups! Ocurrio un error interno, intente nuevamente..", "Error!", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -231,7 +237,7 @@ public class VentanaGestion {
 		resultList = new DefaultListModel<String>();
 		listUsuarios = new JList<String>();
 		listUsuarios.setModel(resultList);
-		listUsuarios.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 12));
+		listUsuarios.setFont(new Font("Arial Rounded MT Bold", Font.PLAIN, 16));
 		listUsuarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listUsuarios.setBounds(10, 61, 409, 162);
 		scrollPane = new JScrollPane(listUsuarios);
